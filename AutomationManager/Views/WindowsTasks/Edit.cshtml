@@ -1,0 +1,64 @@
+﻿@model AutomationManager.Models.WindowsTasks
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>WindowsTasks</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TriggerType" class="control-label"></label>
+                <input asp-for="TriggerType" class="form-control" />
+                <span asp-validation-for="TriggerType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TriggerString" class="control-label"></label>
+                <input asp-for="TriggerString" class="form-control" />
+                <span asp-validation-for="TriggerString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TriggerAction" class="control-label"></label>
+                <input asp-for="TriggerAction" class="form-control" />
+                <span asp-validation-for="TriggerAction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastRun" class="control-label"></label>
+                <input asp-for="LastRun" class="form-control" />
+                <span asp-validation-for="LastRun" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedByUser" class="control-label"></label>
+                <input asp-for="CreatedByUser" class="form-control" />
+                <span asp-validation-for="CreatedByUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

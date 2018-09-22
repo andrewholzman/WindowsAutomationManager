@@ -1,0 +1,89 @@
+﻿@model AutomationManager.Models.WindowsTasks
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>WindowsTasks</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateTask">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TriggerType" class="control-label"></label>
+                <input asp-for="TriggerType" class="form-control" value="Custom" readonly/>
+                <span asp-validation-for="TriggerType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TriggerString" class="control-label"></label>
+                @*<input asp-for="TriggerString" class="form-control" value="custom"/>*@
+                @*<input asp-for="TriggerString" class="form-control" value="custom" readonly/>*@
+                <div id="cron" clas="cron"></div>
+                <p hidden>@Html.TextBoxFor(m => m.TriggerString, new { id = "cron-value" })</p>
+                <span asp-validation-for="TriggerString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TriggerAction" class="control-label"></label>
+                <input asp-for="TriggerAction" class="form-control" value="ExecAction" readonly/>
+                <span asp-validation-for="TriggerAction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateCreated" class="control-label"></label>
+                @*<input asp-for="DateCreated" class="form-control" />*@
+                @*@Html.TextBoxFor(m=>m.DateCreated, new {@class="form-control", Value = DateTime.Today})*@
+                <input id="DateCreated" value=@DateTime.Today class="form-control" readonly/>
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedByUser" class="control-label"></label>
+                <input asp-for="CreatedByUser" class="form-control" value="Andrew" readonly/>
+                <span asp-validation-for="CreatedByUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(function() {
+            $('#cron').jqCron({
+                enabled_minute: true,
+                multiple_dom: true,
+                multiple_month: true,
+                multiple_mins: true,
+                multiple_dow: true,
+                multiple_time_hours: true,
+                multiple_time_minutes: true,
+                default_period: 'week',
+                default_value: $('#cron-value').innerHTML,
+                no_reset_button: false,
+                lang: 'en',
+                bind_to: $('#cron-value'),
+                bind_method: {
+                    set: function($element, value) {
+
+                        $element.innerHTML = value;
+                        $element.val(value);
+                    }
+                }
+            });
+        });
+    </script>
+}
