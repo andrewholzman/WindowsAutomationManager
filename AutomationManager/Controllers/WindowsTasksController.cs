@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using AM_TaskScheduler;
 using Task = Microsoft.Win32.TaskScheduler.Task;
 
-namespace AutomationManager
+namespace AutomationManager.Controllers
 {
     public class WindowsTasksController : Controller
     {
@@ -32,8 +32,8 @@ namespace AutomationManager
                 WindowsTasks task = new WindowsTasks();
                 task.Id = Guid.NewGuid(); //need to map this to something else from the task. look into docs
                 task.Description = t.Definition.RegistrationInfo.Description;
-                var asdf = t.Definition.Triggers.Count;
-                if (asdf > 0)
+                var triggerCount = t.Definition.Triggers.Count;
+                if (triggerCount > 0)
                 {
                     task.TriggerType = t.Definition.Triggers.First().TriggerType.ToString();
                     task.TriggerString = t.Definition.Triggers.First().Repetition.ToString(); //need to figure out what the trigger's schedule looks like and put it in here 
@@ -81,7 +81,7 @@ namespace AutomationManager
             {
                 //string server, string username, string domain, string password, string folder, string description, string cronString
                 AM_TaskScheduler.TaskScheduler tm = new AM_TaskScheduler.TaskScheduler();
-                tm.CreateTask("",task.Description,task.TriggerString);
+                tm.CreateTask(task.Description,task.TriggerString);
 
             }
             return RedirectToAction("Index");
