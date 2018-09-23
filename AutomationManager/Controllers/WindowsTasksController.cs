@@ -24,7 +24,7 @@ namespace AutomationManager.Controllers
         public async Task<IActionResult> Index()
         {
             //todo: make this async
-            AM_TaskScheduler.TaskScheduler tm = new AM_TaskScheduler.TaskScheduler();
+            AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
             List<Task> tasks = tm.GetTasks();
             List<WindowsTasks> windowsTasks = new List<WindowsTasks>();
             foreach (var t in tasks)
@@ -80,7 +80,7 @@ namespace AutomationManager.Controllers
             if (ModelState.IsValid)
             {
                 //string server, string username, string domain, string password, string folder, string description, string cronString
-                AM_TaskScheduler.TaskScheduler tm = new AM_TaskScheduler.TaskScheduler();
+                AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
                 tm.CreateTask(task.Description,task.TriggerString);
 
             }

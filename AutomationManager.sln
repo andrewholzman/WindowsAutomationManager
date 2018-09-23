@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationManager", "AutomationManager\AutomationManager.csproj", "{911404CA-7301-4EBF-BCF1-683BA9E62ECF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationManager", "AutomationManager\AutomationManager.csproj", "{911404CA-7301-4EBF-BCF1-683BA9E62ECF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM-TaskScheduler", "AM-TaskScheduler\AM-TaskScheduler.csproj", "{1E7C52AC-395B-4F4A-AE25-3E0EF0ED4CCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM-TaskScheduler", "AM-TaskScheduler\AM-TaskScheduler.csproj", "{1E7C52AC-395B-4F4A-AE25-3E0EF0ED4CCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM-SqlServer", "AM-SqlServer\AM-SqlServer.csproj", "{0E319F79-8F71-4232-B536-1A69BF1E0A1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM-CustomJobs", "AM-CustomJobs\AM-CustomJobs.csproj", "{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{1E7C52AC-395B-4F4A-AE25-3E0EF0ED4CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E7C52AC-395B-4F4A-AE25-3E0EF0ED4CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E7C52AC-395B-4F4A-AE25-3E0EF0ED4CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E319F79-8F71-4232-B536-1A69BF1E0A1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E319F79-8F71-4232-B536-1A69BF1E0A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E319F79-8F71-4232-B536-1A69BF1E0A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E319F79-8F71-4232-B536-1A69BF1E0A1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

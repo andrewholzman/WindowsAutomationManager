@@ -7,7 +7,7 @@ using Microsoft.Win32.TaskScheduler;
 
 namespace AM_TaskScheduler
 {
-    public class TaskScheduler
+    public class TaskSchedulerManager
     {
         private static string TaskPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),@"Tasks\AutomationManager\");
 
