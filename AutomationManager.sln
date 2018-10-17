@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationManager", "Automa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM-TaskScheduler", "AM-TaskScheduler\AM-TaskScheduler.csproj", "{1E7C52AC-395B-4F4A-AE25-3E0EF0ED4CCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM-SqlServer", "AM-SqlServer\AM-SqlServer.csproj", "{0E319F79-8F71-4232-B536-1A69BF1E0A1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM-SqlServer", "AM-SqlServer\AM-SqlServer.csproj", "{0E319F79-8F71-4232-B536-1A69BF1E0A1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM-CustomJobs", "AM-CustomJobs\AM-CustomJobs.csproj", "{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM-CustomJobs", "AM-CustomJobs\AM-CustomJobs.csproj", "{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationManagerTests", "AutomationManagerTests\AutomationManagerTests.csproj", "{32731DCA-1848-4128-8487-E8696EF48C0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32731DCA-1848-4128-8487-E8696EF48C0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32731DCA-1848-4128-8487-E8696EF48C0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32731DCA-1848-4128-8487-E8696EF48C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32731DCA-1848-4128-8487-E8696EF48C0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
