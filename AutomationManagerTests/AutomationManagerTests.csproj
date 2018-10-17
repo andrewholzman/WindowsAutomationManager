@@ -12,4 +12,10 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AM-CustomJobs\AM-CustomJobs.csproj" />
+    <ProjectReference Include="..\AM-SqlServer\AM-SqlServer.csproj" />
+    <ProjectReference Include="..\AM-TaskScheduler\AM-TaskScheduler.csproj" />
+  </ItemGroup>
+
 </Project>
