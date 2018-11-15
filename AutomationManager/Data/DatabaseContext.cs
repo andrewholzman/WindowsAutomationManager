@@ -15,6 +15,7 @@ namespace AutomationManager.Data
             }
 
             public DbSet<WindowsTasks> WindowsTasks { get; set; }
+            public DbSet<SQLJob> SQLJobs { get; set; }
         
     }
 }

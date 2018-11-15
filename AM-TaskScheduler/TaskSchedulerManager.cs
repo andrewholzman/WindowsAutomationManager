@@ -17,10 +17,10 @@ namespace AM_TaskScheduler
             {
                 using (TaskService ts = new TaskService())
                 {
-                    IEnumerable<Task> tasks = ts.RootFolder.AllTasks;
+                    Predicate<Task> filter = FindNonSystemTasks;
+                    IEnumerable<Task> tasks = ts.FindAllTasks(filter); //using the predicate FindNonSystemTasks to exclude any task that is under the Microsoft folder
                     return tasks.ToList();
                 }
-
 
             }
             catch (Exception ex)
@@ -92,6 +92,20 @@ namespace AM_TaskScheduler
             catch (Exception ex)
             {
                 throw new Exception("Failed to create task on local host" + ex.Message);
+            }
+        }
+
+        /**
+         * Predicate used in the retrieval of all tasks to remove microsft System tasks windows has preloaded
+         */
+        private static bool FindNonSystemTasks(Task task)
+        {
+            if (task.Folder.ToString().Contains("Microsoft"))
+            {
+                return false;
+            } else
+            {
+                return true;
             }
         }
     }
