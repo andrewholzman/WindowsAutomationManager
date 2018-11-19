@@ -28,16 +28,20 @@
                 @Html.DisplayNameFor(model => model.Steps)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                @* @Html.DisplayNameFor(model => model.DateCreated) *@
+                Created
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateModified)
+                @* @Html.DisplayNameFor(model => model.DateModified) *@
+                Modified
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastRunDate)
+                @* @Html.DisplayNameFor(model => model.LastRunDate) *@
+                Last Ran
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NextRunDate)
+                @* @Html.DisplayNameFor(model => model.NextRunDate) *@
+                Next Run
             </th>
             <th></th>
         </tr>
@@ -72,11 +76,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.NextRunDate)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.JobID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.JobID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.JobID">Delete</a>
-            </td>
+            @* <td> *@
+            @*     <a asp-action="Edit" asp-route-id="@item.JobID">Edit</a> | *@
+            @*     <a asp-action="Details" asp-route-id="@item.JobID">Details</a> | *@
+            @*     <a asp-action="Delete" asp-route-id="@item.JobID">Delete</a> *@
+            @* </td> *@
         </tr>
 }
     </tbody>

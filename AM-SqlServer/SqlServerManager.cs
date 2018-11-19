@@ -93,5 +93,11 @@ namespace AM_SqlServer
                 throw new Exception("Srv is null make me a good exception do something else");
             }
         }
+
+
+        public void CreateJob(Job job)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

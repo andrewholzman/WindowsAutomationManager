@@ -23,5 +23,19 @@ namespace AutomationManagerTests
             List<Job> jobs = _ssm.GetAllSqlAgentJobs("sa", "password");
             Assert.IsTrue(jobs.Count>0);
         }
+
+        [TestMethod]
+        public void RemoteSqlServerConnectionSqlAuthShouldSucceed()
+        {
+            Server srv = _ssm.ConnectToRemoteDatabase("SERVER02", "sa", "password");
+            Assert.IsNotNull(srv);
+        }
+
+        [TestMethod]
+        public void RemoteSqlServerConnectionShouldReturnJobs()
+        {
+            List<Job> jobs = _ssm.GetAllSqlAgentJobs("sa", "password", "SERVER02");
+            Assert.IsTrue(jobs.Count>0);
+        }
     }
 }

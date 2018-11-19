@@ -25,10 +25,29 @@ namespace AutomationManager.Controllers
         {
             AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
             //TODO: use AppSettings to pull this, set value through a settings/config menu
-            List<Job> jobs = ssm.GetAllSqlAgentJobs("sa","password");
+            List<Job> localJobs = ssm.GetAllSqlAgentJobs("sa","password");
             List<SQLJob> sqlJobs = new List<SQLJob>();
 
-            foreach (Job j in jobs)
+            foreach (Job j in localJobs)
+            {
+                SQLJob job = new SQLJob();
+                job.JobID = j.JobID;
+                job.Name = j.Name;
+                job.Description = j.Description;
+                job.OriginatingServer = j.OriginatingServer;
+                job.Schedule = j.JobSchedules;
+                job.Steps = j.JobSteps;
+                job.CurrentRunStatus = j.CurrentRunStatus;
+                job.CurrentRunStep = j.CurrentRunStep;
+                job.DateCreated = j.DateCreated;
+                job.DateModified = j.DateLastModified;
+                job.LastRunDate = j.LastRunDate;
+                job.NextRunDate = j.NextRunDate;
+                sqlJobs.Add(job);
+            }
+
+            List<Job> remoteJobs = ssm.GetAllSqlAgentJobs("sa", "password", "SERVER02");
+            foreach (Job j in remoteJobs)
             {
                 SQLJob job = new SQLJob();
                 job.JobID = j.JobID;
@@ -71,6 +90,17 @@ namespace AutomationManager.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        // POST : SQLJobs/Create but no to entity db, create to SQL server
+        public IActionResult CreateJob(Job job)
+        {
+            if (ModelState.IsValid)
+            {
+                AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
+                ssm.CreateJob(job);
+            }
+            return RedirectToAction("Index");
         }
 
         // POST: SQLJobs/Create
