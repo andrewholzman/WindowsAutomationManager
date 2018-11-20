@@ -1,13 +1,13 @@
 ﻿@model AutomationManager.Models.SQLJob
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Job Details";
 }
 
-<h2>Details</h2>
+
 
 <div>
-    <h4>SQLJob</h4>
+    <h2>@Html.DisplayFor(model => model.Name)</h2>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -23,36 +23,71 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.OriginatingServer)
+            @*@Html.DisplayNameFor(model => model.OriginatingServer)*@
+            Originating Server
         </dt>
         <dd>
             @Html.DisplayFor(model => model.OriginatingServer)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
+            @*@Html.DisplayNameFor(model => model.DateCreated)*@
+            Date Created
         </dt>
         <dd>
             @Html.DisplayFor(model => model.DateCreated)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateModified)
+            @*@Html.DisplayNameFor(model => model.DateModified)*@
+            Date Modified
         </dt>
         <dd>
             @Html.DisplayFor(model => model.DateModified)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.LastRunDate)
+            @*@Html.DisplayNameFor(model => model.LastRunDate)*@
+            Last Run
         </dt>
         <dd>
             @Html.DisplayFor(model => model.LastRunDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.NextRunDate)
+            @*@Html.DisplayNameFor(model => model.NextRunDate)*@
+            Next Run
         </dt>
         <dd>
             @Html.DisplayFor(model => model.NextRunDate)
         </dd>
     </dl>
+    <div>
+        <h2>Job Steps</h2>
+        <table class="table">
+            
+            <thead>
+                <tr>
+                    <th>
+                        Step ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Command
+                    </th>
+                    <th>
+                        Database
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (JobStep jobStep in Model.Steps)
+                {
+                    JobStepViewModel jsVm = new JobStepViewModel(jobStep.ID, jobStep.Command, jobStep.DatabaseName, jobStep.Name, jobStep.LastRunDate, jobStep.Parent.Name);
+                    Html.RenderPartial("JobStep", jsVm);
+                }
+            </tbody>
+        </table>
+        
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.JobID">Edit</a> |

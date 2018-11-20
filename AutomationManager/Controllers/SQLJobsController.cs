@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AM_SqlServer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.SqlServer.Management.Smo.Agent;
@@ -69,21 +70,31 @@ namespace AutomationManager.Controllers
         }
 
         // GET: SQLJobs/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid id, [FromQuery]string server)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            SqlServerManager ssm = new SqlServerManager();
+            var j = ssm.FindJobByID(id, "sa","password",server);
+            SQLJob job = new SQLJob();
+            job.JobID = j.JobID;
+            job.Name = j.Name;
+            job.Description = j.Description;
+            job.OriginatingServer = j.OriginatingServer;
+            job.Schedule = j.JobSchedules;
+            job.Steps = j.JobSteps;
+            job.CurrentRunStatus = j.CurrentRunStatus;
+            job.CurrentRunStep = j.CurrentRunStep;
+            job.DateCreated = j.DateCreated;
+            job.DateModified = j.DateLastModified;
+            job.LastRunDate = j.LastRunDate;
+            job.NextRunDate = j.NextRunDate;
+//            var sQLJob = await _context.SQLJobs
+//                .FirstOrDefaultAsync(m => m.JobID == id);
+//            if (sQLJob == null)
+//            {
+//                return NotFound();
+//            }
 
-            var sQLJob = await _context.SQLJobs
-                .FirstOrDefaultAsync(m => m.JobID == id);
-            if (sQLJob == null)
-            {
-                return NotFound();
-            }
-
-            return View(sQLJob);
+            return View(job);
         }
 
         // GET: SQLJobs/Create

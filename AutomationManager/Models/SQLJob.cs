@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Management.Smo.Agent;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,7 +22,7 @@ namespace AutomationManager.Models
         [NotMapped]
         public object Schedule { get; set; }
         [NotMapped]
-        public object Steps { get; set; }
+        public JobStepCollection Steps { get; set; }
         [NotMapped]
         public object CurrentRunStatus { get; set; }
         [NotMapped]

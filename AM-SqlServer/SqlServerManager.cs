@@ -99,5 +99,29 @@ namespace AM_SqlServer
         {
             throw new NotImplementedException();
         }
+
+        public Job FindJobByID(Guid jobId, string username, string password, string server = "localhost")
+        {
+        
+            Server srv = null;
+            if (server == "localhost")
+            {
+                srv = ConnectToLocalDatabase(username, password);
+            }
+            else
+            {
+                srv = ConnectToRemoteDatabase(server, username, password);
+            }
+
+            if (srv != null)
+            {
+                Job j = srv.JobServer.GetJobByID(jobId);
+                return j;
+            }
+            else
+            {
+                throw new Exception("bad server");
+            }
+        }
     }
 }

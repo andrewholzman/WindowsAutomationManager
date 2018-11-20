@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<AutomationManager.Models.SQLJob>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "SQL Agent Jobs";
 }
 
-<h2>Index</h2>
+<h2>SQL Agent Jobs</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @*<a asp-action="Create">Create New</a>*@
 </p>
 <table class="table">
     <thead>
@@ -76,11 +76,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.NextRunDate)
             </td>
-            @* <td> *@
+            <td>
             @*     <a asp-action="Edit" asp-route-id="@item.JobID">Edit</a> | *@
-            @*     <a asp-action="Details" asp-route-id="@item.JobID">Details</a> | *@
+            <a asp-action="Details" asp-route-id="@item.JobID.ToString()" asp-route-server="@item.OriginatingServer">Details</a>
             @*     <a asp-action="Delete" asp-route-id="@item.JobID">Delete</a> *@
-            @* </td> *@
+            </td>
         </tr>
 }
     </tbody>
