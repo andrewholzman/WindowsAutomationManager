@@ -1,0 +1,58 @@
+﻿<div class="container">
+    <div class="row">
+        
+            <div id="chart1"></div>
+            <div id="chart2"></div>
+
+
+    </div>
+</div>
+
+    @section scripts{
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script>
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Result','color:blue');
+                data.addColumn('number', 'Count', 'colo:red');
+                data.addRows([
+                    ['Success', 54],
+                    ['Failure', 7],
+ 
+                ]);
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Result', 'Count', { role: 'style' }],
+                    ['Success', 54, 'color: blue'],
+                    ['Failure', 7, 'color: red'],
+                ]);
+
+                // Simple Bar Chart:
+                var option = {
+                    title: 'SQL Agent Job History - Success Vs Failure',
+                    legend: { position: 'none' },
+                    width: 500,
+                    height: 400
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+
+                // Simple Bar Chart:
+                var option = {
+                    title: 'SQL Agent Job History - Success Vs Failure',
+                    legend: { position: 'none' },
+                    width: 500,
+                    height: 400
+                };
+
+                var chart2 = new google.visualization.PieChart(document.getElementById('chart2'));
+                chart2.draw(data, option);
+
+
+            }
+        </script>
+    }
