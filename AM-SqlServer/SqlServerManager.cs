@@ -343,6 +343,7 @@ namespace AM_SqlServer
                     if (cleanJob != dirtyJob)
                     {
                         UpdateJob(cleanJob, dirtyJob);
+                        cleanJob.Alter(); //update the instance of the job on the jobServer
                     }
                     return cleanJob;
                 } catch (Exception ex)
@@ -375,6 +376,7 @@ namespace AM_SqlServer
                     if (cleanJob != dirtyJob)
                     {
                         UpdateJob(cleanJob, dirtyJob);
+                        cleanJob.Alter(); //update the instance of the job on the jobServer
                     }
                     return cleanJob;
                 }
@@ -390,14 +392,24 @@ namespace AM_SqlServer
             }
         }
 
+        /// <summary>
+        /// Loop through the properties of the clean job (pulled from the JobServer)
+        /// and if they differ from the dirty job, update the cleanjob with the dirty job's values
+        /// </summary>
+        /// <param name="cleanJob">clean job pulled from JobServer</param>
+        /// <param name="dirtyJob">Edited job sent from web site</param>
         private void UpdateJob(Job cleanJob, Job dirtyJob)
         {
-            foreach (PropertyInfo prop in cleanJob.GetType().GetProperties())
+            foreach (PropertyInfo propInfo in cleanJob.GetType().GetProperties())
             {
-                PropertyInfo dirtyProp = dirtyJob.GetType().GetProperty(prop.Name);
-                if (dirtyProp != prop)
+                if (propInfo.CanRead)
                 {
-                    cleanJob.GetType().GetProperty(prop.Name).SetValue(cleanJob.GetType().GetProperty(prop.Name), dirtyProp);
+                    object cleanValue = propInfo.GetValue(cleanJob, null);
+                    object dirtyValue = propInfo.GetValue(dirtyJob, null);
+                    if (!Equals(cleanValue,dirtyValue))
+                    {
+                        propInfo.SetValue(cleanJob, dirtyValue);
+                    }
                 }
             }
         }
