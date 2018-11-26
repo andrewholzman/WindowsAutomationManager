@@ -16,22 +16,27 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TriggerType)
+                @*@Html.DisplayNameFor(model => model.TriggerType)*@
+                Trigger Type
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.TriggerString)
+            </th>*@
+            <th>
+                @*@Html.DisplayNameFor(model => model.TriggerAction)*@
+                Action
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TriggerAction)
+                @*@Html.DisplayNameFor(model => model.DateCreated)*@
+                Date Created
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                @*@Html.DisplayNameFor(model => model.LastRun)*@
+                Last Ran
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastRun)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedByUser)
+                @*@Html.DisplayNameFor(model => model.CreatedByUser)*@
+                Created By
             </th>
             <th></th>
         </tr>
@@ -45,9 +50,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.TriggerType)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.TriggerString)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.TriggerAction)
             </td>
@@ -61,8 +66,8 @@
                 @Html.DisplayFor(modelItem => item.CreatedByUser)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
 }

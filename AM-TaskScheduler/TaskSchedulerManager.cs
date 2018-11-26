@@ -86,7 +86,8 @@ namespace AM_TaskScheduler
                     td.Actions.Add(new ExecAction("notepad.exe", "C:\\temp\\temp.log", null));
                     td.Principal.UserId = @"NT AUTHORITY\NETWORKSERVICE"; /*System.Security.Principal.WindowsIdentity.GetCurrent().Name;*/
                     td.Principal.LogonType = TaskLogonType.ServiceAccount;
-                    TaskService.Instance.RootFolder.RegisterTaskDefinition(@"Test", td);
+                    string taskDef = description;
+                    TaskService.Instance.RootFolder.RegisterTaskDefinition(taskDef, td);
                 }
             }
             catch (Exception ex)
