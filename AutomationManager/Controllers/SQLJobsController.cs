@@ -15,18 +15,22 @@ namespace AutomationManager.Controllers
     public class SQLJobsController : Controller
     {
         private readonly DatabaseContext _context;
+        private AM_SqlServer.SqlServerManager _ssm;
 
         public SQLJobsController(DatabaseContext context)
         {
             _context = context;
+            //TODO - pull from AppSettings. Construct a WAMSqlConnection object that contains the server username and password
+            // and alter SSM constructor to take in list of WAMSqlConnection objects
+            _ssm = new SqlServerManager("localhost","sa","password",null);
         }
 
         // GET: SQLJobs
         public async Task<IActionResult> Index()
         {
-            AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
+            //AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
             //TODO: use AppSettings to pull this, set value through a settings/config menu
-            List<Job> localJobs = ssm.GetAllSqlAgentJobs("sa","password");
+            List<Job> localJobs = _ssm.GetAllSqlAgentJobs();
             List<SQLJob> sqlJobs = new List<SQLJob>();
 
             foreach (Job j in localJobs)
@@ -47,10 +51,12 @@ namespace AutomationManager.Controllers
                 sqlJobs.Add(job);
             }
 
-            List<Job> remoteJobs = ssm.GetAllSqlAgentJobs("sa", "password", "SERVER02");
+            //TODO remove this and have code loop through the list of WAMSqlConnectionObjects and pull jobs for each
+            List<Job> remoteJobs = _ssm.GetAllSqlAgentJobs("sa", "password", "SERVER02");
             foreach (Job j in remoteJobs)
             {
                 SQLJob job = new SQLJob();
+                //TODO move this to a constructor
                 job.JobID = j.JobID;
                 job.Name = j.Name;
                 job.Description = j.Description;
@@ -72,9 +78,10 @@ namespace AutomationManager.Controllers
         // GET: SQLJobs/Details/5
         public async Task<IActionResult> Details(Guid id, [FromQuery]string server)
         {
-            SqlServerManager ssm = new SqlServerManager();
-            var j = ssm.FindJobByID(id, "sa","password",server);
+            //SqlServerManager ssm = new SqlServerManager();
+            var j = _ssm.FindJobByID(id,server);
             SQLJob job = new SQLJob();
+            //TODO move this to a constructor
             job.JobID = j.JobID;
             job.Name = j.Name;
             job.Description = j.Description;
@@ -108,8 +115,8 @@ namespace AutomationManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
-                ssm.CreateJob(job);
+                //AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
+                _ssm.CreateJob(job);
             }
             return RedirectToAction("Index");
         }

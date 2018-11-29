@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
 using System.Reflection;
+using AM_SqlServer.Models;
 
 namespace AM_SqlServer
 {
@@ -15,12 +16,14 @@ namespace AM_SqlServer
         private static string _server;
         private static string _username;
         private static string _password;
+        private List<WAMSqlConnection> _connections;
 
-        public SqlServerManager(string server, string username, string password)
+        public SqlServerManager(string server, string username, string password, List<WAMSqlConnection> conns)
         {
             _server = server;
             _username = username;
             _password = password;
+            _connections = conns;
         }
         public SqlServerManager() { } //empty constructor to allow manual creation for now
 
