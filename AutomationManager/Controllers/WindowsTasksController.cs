@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AM_TaskScheduler;
 using Task = Microsoft.Win32.TaskScheduler.Task;
+using System.IO;
 
 namespace AutomationManager.Controllers
 {
@@ -19,6 +20,11 @@ namespace AutomationManager.Controllers
         {
             _context = context;
         }
+
+        private string localIP = Utils.GetAllLocalIPv4(System.Net.NetworkInformation.NetworkInterfaceType.Ethernet).FirstOrDefault();
+        private string _folderPath = "\\WAM\\Uploads\\";
+        
+
 
         // GET: WindowsTasks from system task registration, not database
         public async Task<IActionResult> Index()
@@ -71,7 +77,9 @@ namespace AutomationManager.Controllers
         // GET: WindowsTasks/Create
         public IActionResult Create()
         {
-            return View();
+            WindowsTasks task = new WindowsTasks();
+
+            return View(task);
         }
 
         // POST: WindowsTasks/Create but not to database
@@ -79,9 +87,23 @@ namespace AutomationManager.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (task.ActionFile.Length > 0)
+                {
+                  // string filePath = $@"\\{localIP}\c$" + _folderPath;
+                    string filePath = "C:\\WAM\\Uploads\\"+task.ActionFile.FileName;
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        task.ActionFile.CopyToAsync(stream);
+                        task.ActionFilePath = $@"\\{localIP}"+_folderPath + task.ActionFile.FileName;
+                       
+
+                    }
+                }
                 //string server, string username, string domain, string password, string folder, string description, string cronString
                 AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
-                tm.CreateTask(task.Description,task.TriggerString);
+                WindowsTask mTasks = new WindowsTask(task);
+
+                tm.CreateTask(mTasks);
 
             }
             return RedirectToAction("Index");

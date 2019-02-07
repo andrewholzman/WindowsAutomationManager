@@ -54,7 +54,7 @@ namespace AM_TaskScheduler
             }
         }
 
-        public void CreateTask(string description, string cronString)
+        public void CreateTask(WindowsTask task)
         {
             try
             {
@@ -78,15 +78,28 @@ namespace AM_TaskScheduler
                 using (TaskService ts = new TaskService())
                 {
                     TaskDefinition td = ts.NewTask();
-                    td.RegistrationInfo.Description = description;
+                    td.RegistrationInfo.Description = task.Description;
 
-                    Trigger[] trigger = Trigger.FromCronFormat(cronString);
+ 
+                    switch (task.TriggerType)
+                    {
+                        case "Custom":
+                            Trigger[] trigger = Trigger.FromCronFormat(task.TriggerString);
+                            td.Triggers.Add(trigger.First());
+                            break;
+                        case "Logon":
+                            td.Triggers.Add(new LogonTrigger());
+                            break;
+                        case "Startup":
+                            td.Triggers.Add(new BootTrigger());
+                            break;
+                    }
 
-                    td.Triggers.Add(trigger.First());
-                    td.Actions.Add(new ExecAction("notepad.exe", "C:\\temp\\temp.log", null));
+                    
+                    td.Actions.Add(new ExecAction(task.ActionFilePath, null));
                     td.Principal.UserId = @"NT AUTHORITY\NETWORKSERVICE"; /*System.Security.Principal.WindowsIdentity.GetCurrent().Name;*/
                     td.Principal.LogonType = TaskLogonType.ServiceAccount;
-                    string taskDef = description;
+                    string taskDef = task.Description;
                     TaskService.Instance.RootFolder.RegisterTaskDefinition(taskDef, td);
                 }
             }
