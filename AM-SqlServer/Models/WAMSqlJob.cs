@@ -1,31 +1,24 @@
 ﻿using Microsoft.SqlServer.Management.Smo.Agent;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace AutomationManager.Models
+namespace AM_SqlServer.Models
 {
-    public class SQLJob
+    public class WAMSQLJob
     {
         //for ref: https://docs.microsoft.com/en-us/dotnet/api/microsoft.sqlserver.management.smo.agent.job?view=sqlserver-2016
-        [Key]
-        [Required]
         public Guid JobID { get; set; }
-        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public string OriginatingServer { get; set; }
-
-        [NotMapped]
-        public object Schedule { get; set; }
-        [NotMapped]
+        // object set to weekly, recurrence factor evrey 1 week, and the interval set to integer as follows:
+        //1 = Sunday, 2 = Monday, 4 = Tuesady, 8 = Wednesday, 16 = Thursday, 32 = friday, 64 = Saturday
+        public JobSchedule Schedule { get; set; }
+        
+        //objects created to execute whatever query they type in
         public JobStepCollection Steps { get; set; }
-        [NotMapped]
         public object CurrentRunStatus { get; set; }
-        [NotMapped]
         public object CurrentRunStep { get; set; }
 
         public DateTime DateCreated { get; set; }

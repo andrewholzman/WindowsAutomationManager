@@ -135,6 +135,7 @@ namespace AutomationManager.Controllers
             }
 
             var windowsTasks = await _context.WindowsTasks.FindAsync(id);
+
             if (windowsTasks == null)
             {
                 return NotFound();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AM_SqlServer;
+using AM_SqlServer.Models;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Smo.Agent;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,6 +37,20 @@ namespace AutomationManagerTests
         {
             List<Job> jobs = _ssm.GetAllSqlAgentJobs("sa", "password", "SERVER02");
             Assert.IsTrue(jobs.Count>0);
+        }
+
+        [TestMethod]
+        public void JobShouldBeCreated()
+        {
+            WAMSQLJob job = new WAMSQLJob();
+            job.JobID = System.Guid.NewGuid();
+            job.Name = "test job";
+            job.Description = "Unit Test Job";
+            job.OriginatingServer = "SERVER02";
+            job.Schedule = new JobSchedule();
+            job.Schedule.Name = "Unit Test Job Schedule";
+            
+            
         }
     }
 }

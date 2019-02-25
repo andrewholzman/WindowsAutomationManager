@@ -1,17 +1,19 @@
-﻿@model AutomationManager.Models.SQLJob
+﻿@model AutomationManager.Models.CreateJobViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    CreateJobViewModel m = new CreateJobViewModel();
 }
-
-<h2>Create</h2>
-
-<h4>SQLJob</h4>
+<h4>CreateJobViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateJob">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                    <label asp-for="Id" class="control-label"></label>
+                    <input asp-for="Id" class="form-control" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -23,31 +25,27 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="OriginatingServer" class="control-label"></label>
-                <input asp-for="OriginatingServer" class="form-control" />
-                <span asp-validation-for="OriginatingServer" class="text-danger"></span>
+                <label asp-for="Server" class="control-label"></label>
+                <input asp-for="Server" class="form-control" />
+                <span asp-validation-for="Server" class="text-danger"></span>
             </div>
+            @*<h3>Job Schedule</h3>
+            @{
+                JobScheduleViewModel jssvm = new JobScheduleViewModel();
+                m.Schedule = jssvm;
+                await Html.RenderPartialAsync("JobSchedule", m.Schedule);
+
+            }*@
+            <h3>Job Schedule</h3>
+            <partial name="JobSchedule" for="Schedule" model="Schedule"/>
+            <h3>Job Steps</h3>
+            @{ 
+                CreateJobStepViewModel cjsvm = new CreateJobStepViewModel();
+                m.Step = cjsvm;
+                await Html.RenderPartialAsync("CreateJobStep", m.Step);
+            }
             <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateModified" class="control-label"></label>
-                <input asp-for="DateModified" class="form-control" />
-                <span asp-validation-for="DateModified" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastRunDate" class="control-label"></label>
-                <input asp-for="LastRunDate" class="form-control" />
-                <span asp-validation-for="LastRunDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NextRunDate" class="control-label"></label>
-                <input asp-for="NextRunDate" class="form-control" />
-                <span asp-validation-for="NextRunDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
@@ -57,7 +55,19 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            $('#timepicker').timepicker({
+                timeFormat: 'hh:mmp',
+                interval: 15,
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true
+            });
+        });
+
+    </script>
 }

@@ -111,12 +111,12 @@ namespace AutomationManager.Controllers
         }
 
         // POST : SQLJobs/Create but no to entity db, create to SQL server
-        public IActionResult CreateJob(Job job)
+        public IActionResult CreateJob(CreateJobViewModel job)
         {
             if (ModelState.IsValid)
             {
                 //AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
-                _ssm.CreateJob(job);
+                //_ssm.CreateJob(job);
             }
             return RedirectToAction("Index");
         }

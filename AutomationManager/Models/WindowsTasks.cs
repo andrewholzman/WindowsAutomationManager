@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace AutomationManager.Models
         public string TriggerType { get; set; }
         public string TriggerString { get; set; }
         public string TriggerAction { get; set; }
+        [NotMapped]
         public IFormFile ActionFile { get; set; }
         public string ActionFilePath { get; set; }
         public DateTime DateCreated { get; set; }
