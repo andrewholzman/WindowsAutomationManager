@@ -15,13 +15,4 @@
     <ProjectReference Include="..\AM-TaskScheduler\AM-TaskScheduler.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="Views\SQLJobs\JobSchedule.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\SQLJobs\CreateJobStep.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-  </ItemGroup>
-
 </Project>

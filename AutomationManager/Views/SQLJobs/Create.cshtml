@@ -1,19 +1,13 @@
 ﻿@model AutomationManager.Models.CreateJobViewModel
 
-@{
-    CreateJobViewModel m = new CreateJobViewModel();
-}
+
 <h4>CreateJobViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateJob">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-                    <label asp-for="Id" class="control-label"></label>
-                    <input asp-for="Id" class="form-control" />
-                    <span asp-validation-for="Id" class="text-danger"></span>
-                </div>*@
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -29,23 +23,32 @@
                 <input asp-for="Server" class="form-control" />
                 <span asp-validation-for="Server" class="text-danger"></span>
             </div>
-            @*<h3>Job Schedule</h3>
-            @{
-                JobScheduleViewModel jssvm = new JobScheduleViewModel();
-                m.Schedule = jssvm;
-                await Html.RenderPartialAsync("JobSchedule", m.Schedule);
-
-            }*@
             <h3>Job Schedule</h3>
-            <partial name="JobSchedule" for="Schedule" model="Schedule"/>
-            <h3>Job Steps</h3>
-            @{ 
-                CreateJobStepViewModel cjsvm = new CreateJobStepViewModel();
-                m.Step = cjsvm;
-                await Html.RenderPartialAsync("CreateJobStep", m.Step);
-            }
             <div class="form-group">
-
+                <label for="ScheduleName">Schedule Name</label>
+                <input asp-for="ScheduleName" class="form-control" />
+                <label for="Name">Run On</label>
+                @*<select asp-for="SelectedDays" multiple="multiple" asp-items="Model.DaysOfWeek" id="days-of-week-select" class="custom-select"></select>*@
+                <select asp-for="SelectedDays" id="selectedDays" multiple="multiple" class="form-control">
+                    <option value="1">Sunday</option>
+                    <option value="2">Monday</option>
+                    <option value="4">Tuesday</option>
+                    <option value="8">Wednesday</option>
+                    <option value="16">Thursday</option>
+                    <option value="32">Friday</option>
+                    <option value="64">Saturday</option>
+                </select>
+                <label for="RunTime">Run Time</label>
+                @*<input id="timepicker" class="form-control" />*@
+                <input asp-for="RunTime" id="timepicker" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="StepName" class="control-label"></label>
+                <input asp-for="StepName" class="form-control" />
+                <label asp-for="Command" class="control-label"></label>
+                <textarea asp-for="Command" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>

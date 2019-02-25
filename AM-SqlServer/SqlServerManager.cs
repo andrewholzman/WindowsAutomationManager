@@ -212,7 +212,7 @@ namespace AM_SqlServer
             }
         }
 
-        public void CreateJob(Job job, string server = "localhost")
+        public void CreateJob(WAMSQLJob job, string server = "localhost")
         {
             Server srv = null;
             if (server == "localhost")
@@ -228,7 +228,12 @@ namespace AM_SqlServer
             {
                 try
                 {
-                    srv.JobServer.Jobs.Add(job);
+                    Job j = new Job();
+                    j.Name = job.Name;
+                    j.Description = job.Description;
+                    
+
+                    srv.JobServer.Jobs.Add(null);
                 } catch (Exception ex)
                 {
                     throw new Exception("Failed To Create Job: " + job.Name + " - " + ex.Message);
@@ -239,7 +244,7 @@ namespace AM_SqlServer
                 throw new Exception("Failed To Connect to SQL Job Server");
             }
         }
-        public void CreateJob(Job job, string username, string password, string server = "localhost")
+        public void CreateJob(WAMSQLJob job, string username, string password, string server = "localhost")
         {
             Server srv = null;
             if (server == "localhost")

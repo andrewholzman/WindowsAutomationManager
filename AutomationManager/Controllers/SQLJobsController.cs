@@ -107,7 +107,8 @@ namespace AutomationManager.Controllers
         // GET: SQLJobs/Create
         public IActionResult Create()
         {
-            return View();
+            CreateJobViewModel cjvm = new CreateJobViewModel();
+            return View(cjvm);
         }
 
         // POST : SQLJobs/Create but no to entity db, create to SQL server
@@ -115,8 +116,27 @@ namespace AutomationManager.Controllers
         {
             if (ModelState.IsValid)
             {
+                int frequency = 0; //days of week in sql agent jobs are handled by a single integer, need to parse selected days and generate that number
+                foreach(string s in job.SelectedDays)
+                {
+                    frequency += int.Parse(s);
+                }
+                AM_SqlServer.Models.WAMSQLJob wsj = new AM_SqlServer.Models.WAMSQLJob();
+                wsj.Name = job.Name;
+                wsj.Description = job.Description;
+                wsj.OriginatingServer = job.Server;
+                wsj.Schedule = new JobSchedule();
+                wsj.Schedule.Name = job.ScheduleName;
+                wsj.Schedule.FrequencyInterval = frequency;
+                wsj.Schedule.FrequencyRecurrenceFactor = 1;
+                wsj.Schedule.FrequencyTypes = FrequencyTypes.Weekly;
+                JobStep js = new JobStep();
+                js.Name = job.StepName;
+                js.Command = job.Command;
+                wsj.Steps.Add(js);
+
                 //AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
-                //_ssm.CreateJob(job);
+                _ssm.CreateJob(wsj);
             }
             return RedirectToAction("Index");
         }
