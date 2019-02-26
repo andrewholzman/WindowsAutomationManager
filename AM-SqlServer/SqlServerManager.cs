@@ -212,7 +212,7 @@ namespace AM_SqlServer
             }
         }
 
-        public void CreateJob(WAMSQLJob job, string server = "localhost")
+        public void CreateJob(WAMSQLJob wamJob, string server = "localhost")
         {
             Server srv = null;
             if (server == "localhost")
@@ -228,15 +228,31 @@ namespace AM_SqlServer
             {
                 try
                 {
-                    Job j = new Job();
-                    j.Name = job.Name;
-                    j.Description = job.Description;
+                    Operator op = new Operator(srv.JobServer, "WAM_Operator");
+                    op.NetSendAddress = "WAM_Server";
+                    op.Create();
+                    Job job = new Job(srv.JobServer, wamJob.Name);
+                    job.Description = wamJob.Description;
+                    job.Create();
+                    
+                    JobStep jobStep = new JobStep(job, wamJob.JobStepName);
+                    jobStep.Command = wamJob.JobStepCommand;
+                    jobStep.OnSuccessAction = StepCompletionAction.QuitWithSuccess;
+                    jobStep.OnFailAction = StepCompletionAction.QuitWithFailure;
+                    jobStep.Create();
                     
 
-                    srv.JobServer.Jobs.Add(null);
+                    JobSchedule jobSched = new JobSchedule(job, wamJob.ScheduleName);
+                    jobSched.FrequencyTypes = wamJob.ScheduleFrequencyType;
+                    jobSched.FrequencyRecurrenceFactor = wamJob.ScheduleFrequencyRecurrenceFactor;
+                    jobSched.FrequencyInterval = wamJob.ScheduleFrequencyInterval;
+                    jobSched.ActiveStartTimeOfDay = wamJob.ScheduleActiveStartTimeOfDay;
+                    jobSched.Create();
+
+
                 } catch (Exception ex)
                 {
-                    throw new Exception("Failed To Create Job: " + job.Name + " - " + ex.Message);
+                    throw new Exception("Failed To Create Job: " + wamJob.Name + " - " + ex.Message);
                 }
                 
             } else
@@ -244,7 +260,7 @@ namespace AM_SqlServer
                 throw new Exception("Failed To Connect to SQL Job Server");
             }
         }
-        public void CreateJob(WAMSQLJob job, string username, string password, string server = "localhost")
+        public void CreateJob(WAMSQLJob wamJob, string username, string password, string server = "localhost")
         {
             Server srv = null;
             if (server == "localhost")
@@ -260,11 +276,29 @@ namespace AM_SqlServer
             {
                 try
                 {
-                    srv.JobServer.Jobs.Add(job);
+                    Operator op = new Operator(srv.JobServer, "WAM_Operator");
+                    op.NetSendAddress = "WAM_Server";
+                    op.Create();
+
+                    Job job = new Job(srv.JobServer, wamJob.Name);
+                    job.Description = wamJob.Description;
+                    job.Create();
+                    JobStep jobStep = new JobStep(job, wamJob.JobStepName);
+                    jobStep.Command = wamJob.JobStepCommand;
+                    jobStep.OnFailAction = StepCompletionAction.QuitWithFailure;
+                    jobStep.Create();
+                    
+
+                    JobSchedule jobSched = new JobSchedule(job, wamJob.ScheduleName);
+                    jobSched.FrequencyTypes = wamJob.ScheduleFrequencyType;
+                    jobSched.FrequencyRecurrenceFactor = wamJob.ScheduleFrequencyRecurrenceFactor;
+                    jobSched.FrequencyInterval = wamJob.ScheduleFrequencyInterval;
+                    jobSched.ActiveStartTimeOfDay = wamJob.ScheduleActiveStartTimeOfDay;
+                    jobSched.Create();
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Failed To Create Job: " + job.Name + " - " + ex.Message);
+                    throw new Exception("Failed To Create Job: " + wamJob.Name + " - " + ex.Message);
                 }
 
             }

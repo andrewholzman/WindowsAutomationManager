@@ -14,10 +14,15 @@ namespace AM_SqlServer.Models
         public string OriginatingServer { get; set; }
         // object set to weekly, recurrence factor evrey 1 week, and the interval set to integer as follows:
         //1 = Sunday, 2 = Monday, 4 = Tuesady, 8 = Wednesday, 16 = Thursday, 32 = friday, 64 = Saturday
-        public JobSchedule Schedule { get; set; }
-        
+        public string ScheduleName { get; set; }
+        public int ScheduleFrequencyInterval { get; set; }
+        public int ScheduleFrequencyRecurrenceFactor { get; set; }
+        public FrequencyTypes ScheduleFrequencyType { get; set; }
+        public TimeSpan ScheduleActiveStartTimeOfDay { get; set; }
+
         //objects created to execute whatever query they type in
-        public JobStepCollection Steps { get; set; }
+        public string JobStepName{ get; set; }
+        public string JobStepCommand { get; set; }
         public object CurrentRunStatus { get; set; }
         public object CurrentRunStep { get; set; }
 

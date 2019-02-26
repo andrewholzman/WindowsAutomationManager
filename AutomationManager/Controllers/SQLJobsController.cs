@@ -125,15 +125,13 @@ namespace AutomationManager.Controllers
                 wsj.Name = job.Name;
                 wsj.Description = job.Description;
                 wsj.OriginatingServer = job.Server;
-                wsj.Schedule = new JobSchedule();
-                wsj.Schedule.Name = job.ScheduleName;
-                wsj.Schedule.FrequencyInterval = frequency;
-                wsj.Schedule.FrequencyRecurrenceFactor = 1;
-                wsj.Schedule.FrequencyTypes = FrequencyTypes.Weekly;
-                JobStep js = new JobStep();
-                js.Name = job.StepName;
-                js.Command = job.Command;
-                wsj.Steps.Add(js);
+                wsj.ScheduleName = job.ScheduleName;
+                wsj.ScheduleFrequencyInterval = frequency;
+                wsj.ScheduleFrequencyRecurrenceFactor = 1;
+                wsj.ScheduleFrequencyType = FrequencyTypes.Weekly;
+                wsj.ScheduleActiveStartTimeOfDay = TimeSpan.Parse(job.RunTime);
+                wsj.JobStepName = job.StepName;
+                wsj.JobStepCommand = job.Command;
 
                 //AM_SqlServer.SqlServerManager ssm = new AM_SqlServer.SqlServerManager();
                 _ssm.CreateJob(wsj);
