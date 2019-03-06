@@ -109,6 +109,39 @@ namespace AM_TaskScheduler
             }
         }
 
+        public void DeleteTask(string taskName)
+        {
+            try
+            {
+                using (TaskService ts = new TaskService())
+                {
+                    TaskFolder folder = ts.FindTask(taskName).Folder;
+                    folder.DeleteTask(taskName);
+                }
+            } catch (Exception ex)
+            {
+                throw new Exception("Failed to remove task" + taskName + " On Local Server. " + ex.Message);
+                     
+            }
+
+        }
+
+        public void DeleteTask(string taskName, string server, string username, string domain, string password)
+        {
+            try
+            {
+                using (TaskService ts = new TaskService(server, username, domain, password))
+                {
+                    TaskFolder folder = ts.FindTask(taskName).Folder;
+                    folder.DeleteTask(taskName);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to remove task: " + taskName + " on server: " + server + " - " + ex.Message);
+            }
+        }
+
         /**
          * Predicate used in the retrieval of all tasks to remove microsft System tasks windows has preloaded
          */

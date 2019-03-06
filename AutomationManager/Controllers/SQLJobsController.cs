@@ -208,21 +208,16 @@ namespace AutomationManager.Controllers
         }
 
         // GET: SQLJobs/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var sQLJob = await _context.SQLJobs
-                .FirstOrDefaultAsync(m => m.JobID == id);
-            if (sQLJob == null)
-            {
-                return NotFound();
-            }
+            _ssm.DeleteJob(id);
+            return RedirectToAction("Index");
 
-            return View(sQLJob);
         }
 
         // POST: SQLJobs/Delete/5

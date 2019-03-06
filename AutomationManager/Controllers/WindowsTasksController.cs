@@ -179,21 +179,17 @@ namespace AutomationManager.Controllers
         }
 
         // GET: WindowsTasks/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(string taskName)
         {
-            if (id == null)
+            if (taskName == null)
             {
                 return NotFound();
             }
 
-            var windowsTasks = await _context.WindowsTasks
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (windowsTasks == null)
-            {
-                return NotFound();
-            }
-
-            return View(windowsTasks);
+            //todo: make this async
+            AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
+            tm.DeleteTask(taskName);
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: WindowsTasks/Delete/5

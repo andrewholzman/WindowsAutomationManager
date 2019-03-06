@@ -66,8 +66,8 @@
                 @Html.DisplayFor(modelItem => item.CreatedByUser)
             </td>
             <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
+                <a asp-action="Delete" asp-route-taskName="@item.Description">Delete</a>
             </td>
         </tr>
 }
