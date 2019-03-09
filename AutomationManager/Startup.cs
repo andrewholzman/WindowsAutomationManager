@@ -37,10 +37,11 @@ namespace AutomationManager
 
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<CustomJobWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime, CustomJobWrapper cjw)
         {
             if (env.IsDevelopment())
             {
@@ -51,6 +52,9 @@ namespace AutomationManager
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            lifetime.ApplicationStarted.Register(cjw.Start);
+            lifetime.ApplicationStopped.Register(cjw.Stop);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

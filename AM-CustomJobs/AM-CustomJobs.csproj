@@ -5,4 +5,8 @@
     <RootNamespace>AM_CustomJobs</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.6.22" />
+  </ItemGroup>
+
 </Project>
