@@ -14,8 +14,10 @@ namespace AutomationManager.Data
             {
             }
 
+            public DbSet<WAMCustomJob> CustomJobs { get; set; }
             public DbSet<WindowsTasks> WindowsTasks { get; set; }
             public DbSet<SQLJob> SQLJobs { get; set; }
+            public DbSet<AutomationManager.Models.WAMCustomJob> WAMCustomJob { get; set; }
         
     }
 }

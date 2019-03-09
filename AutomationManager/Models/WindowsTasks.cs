@@ -27,6 +27,7 @@ namespace AutomationManager.Models
         public DateTime LastRun { get; set; }
         public string CreatedByUser { get; set; }
 
+        [NotMapped]
         public List<SelectListItem> TriggerTypes { get; } = new List<SelectListItem>
         {
             new SelectListItem { Value = "Custom", Text = "Custom" },

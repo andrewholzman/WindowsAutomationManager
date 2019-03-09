@@ -39,18 +39,18 @@ namespace AutomationManagerTests
             Assert.IsTrue(jobs.Count>0);
         }
 
-        [TestMethod]
-        public void JobShouldBeCreated()
-        {
-            WAMSQLJob job = new WAMSQLJob();
-            job.JobID = System.Guid.NewGuid();
-            job.Name = "test job";
-            job.Description = "Unit Test Job";
-            job.OriginatingServer = "SERVER02";
-            job.Schedule = new JobSchedule();
-            job.Schedule.Name = "Unit Test Job Schedule";
+        //[TestMethod]
+        //public void JobShouldBeCreated()
+        //{
+        //    WAMSQLJob job = new WAMSQLJob();
+        //    job.JobID = System.Guid.NewGuid();
+        //    job.Name = "test job";
+        //    job.Description = "Unit Test Job";
+        //    job.OriginatingServer = "SERVER02";
+        //    job.Schedule = new JobSchedule();
+        //    job.Schedule.Name = "Unit Test Job Schedule";
             
             
-        }
+        //}
     }
 }
