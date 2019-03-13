@@ -95,6 +95,8 @@ namespace AM_CustomJobs
             try
             {
                 RecurringJob.Trigger(id);
+                CustomJobModel job = GetJob(id);
+                LogHistory(Guid.NewGuid(),id,job.ScriptType, DateTime.Now, "Trigger");
             } catch (Exception ex)
             {
                 throw new Exception($"Failed to trigger job: {id}. Error: {ex.Message}");
@@ -122,6 +124,7 @@ namespace AM_CustomJobs
                         RecurringJob.AddOrUpdate(id, () => PerformPowershellScript(id, actionFilePath), triggerString);
                         break;
                 }
+                LogHistory(Guid.NewGuid(), id, scriptType, DateTime.Now, "Created");
             } catch (Exception ex)
             {
                 throw new Exception($"Failed to create {scriptType} job. Error: {ex.Message}");
@@ -134,7 +137,9 @@ namespace AM_CustomJobs
         {
             try
             {
+                CustomJobModel job = GetJob(id);
                 RecurringJob.RemoveIfExists(id);
+                LogHistory(Guid.NewGuid(), id, job.ScriptType, DateTime.Now, "Deleted");
             } catch (Exception ex)
             {
                 throw new Exception($"Failed to remove Custom Job {id}. Error: {ex.Message}");
