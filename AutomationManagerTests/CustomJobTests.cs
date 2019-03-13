@@ -13,16 +13,24 @@ namespace AutomationManagerTests
         [TestMethod]
         public void JobShouldCreateSuccessfully()
         {
-            //_cjm.CreateOrUpdateJob();
-            //var x = _cjm.GetJobs();
-            //Assert.IsFalse(x == null);
+            string id = "tset-job-1";
+            string scriptType = "VBS";
+            string actionFilePath = "C:\temp\temp.vbs";
+            string triggerString = "0 * * * *";
+            _cjm.CreateOrUpdateJob(id, scriptType, actionFilePath, triggerString);
         }
-
         [TestMethod]
         public void ShouldReturnJobs()
         {
             var jobs = _cjm.GetJobs();
             Assert.IsFalse(jobs.Count == 0);
+        }
+
+        [TestMethod]
+        public void GetJobById()
+        {
+            var job = _cjm.GetJob("tset-job-1");
+            Assert.IsNotNull(job);
         }
     }
 }

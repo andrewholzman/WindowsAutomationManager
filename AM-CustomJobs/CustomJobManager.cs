@@ -54,25 +54,62 @@ namespace AM_CustomJobs
                 List<CustomJobModel> retJobs = new List<CustomJobModel>();
                 foreach(var job in jobs)
                 {
-                    string x = job.Id;
-                    
+                    string jString = job.Job.ToString().ToUpper();
+                    string scriptType = "";
+                    if (jString.Contains("VBS"))
+                    {
+                        scriptType = "VBS";
+                    } else if (jString.Contains("BAT"))
+                    {
+                        scriptType = "BAT";
+                    } else if (jString.Contains("PS"))
+                    {
+                        scriptType = "PS";
+                    } else
+                    {
+                        scriptType = "OTHER";
+                    }
+
+                    CustomJobModel cjm = new CustomJobModel(job.Id, scriptType, job.Cron, job.LastJobState,job.Job.Args[1].ToString());
+                    retJobs.Add(cjm);
                 }
+                return retJobs;
             } catch (Exception ex)
             {
                 throw new Exception($"Failed to retrieve jobs. Error: {ex.Message}");
             }
-            throw new NotImplementedException();
         }
 
-        public CustomJobModel GetJob(Guid id)
+        
+
+        public CustomJobModel GetJob(string id)
         {
-            throw new NotImplementedException();
+            var jobs = GetJobs();
+            return jobs.Find(j => j.JobName == id);
+            
+
         }
 
-        public void CreateOrUpdateJob(string id, string scriptType, string actionFilePath, string triggerString)
+        public void TriggerJob(string id)
         {
             try
             {
+                RecurringJob.Trigger(id);
+            } catch (Exception ex)
+            {
+                throw new Exception($"Failed to trigger job: {id}. Error: {ex.Message}");
+            }
+
+        }
+
+        public void CreateOrUpdateJob(string id, string scriptType, string actionFilePath, string triggerString, string oldJobName=null)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(oldJobName))
+                {
+                    RemoveJob(oldJobName);
+                }
                 switch (scriptType)
                 {
                     case "BAT":
@@ -105,7 +142,7 @@ namespace AM_CustomJobs
 
         }
 
-        private void PerformBatchScript(string id, string actionFilePath)
+        public void PerformBatchScript(string id, string actionFilePath)
         {
             try
             {
@@ -119,7 +156,7 @@ namespace AM_CustomJobs
         }
 
 
-        private void PerformVBScript(string id, string actionFilePath)
+        public void PerformVBScript(string id, string actionFilePath)
         {
             try
             {
@@ -133,7 +170,7 @@ namespace AM_CustomJobs
             }
         }
 
-        private void PerformPowershellScript(string id, string actionFilePath)
+        public void PerformPowershellScript(string id, string actionFilePath)
         {
             try
             {
@@ -164,7 +201,6 @@ namespace AM_CustomJobs
 
         private static void ExecuteVBSCommand(string filePath)
         {
-
             Process scriptProc = new Process();
             scriptProc.StartInfo.FileName = @"cscript";
             scriptProc.StartInfo.WorkingDirectory = Directory.GetParent(filePath).ToString();

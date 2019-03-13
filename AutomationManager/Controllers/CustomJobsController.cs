@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AutomationManager.Data;
 using AM_CustomJobs;
+using AM_CustomJobs.Models;
+using System.IO;
 
 namespace AutomationManager.Models
 {
@@ -14,6 +16,8 @@ namespace AutomationManager.Models
     {
         private readonly DatabaseContext _context;
         private CustomJobManager _cjm;
+        private string localIP = Utils.GetAllLocalIPv4(System.Net.NetworkInformation.NetworkInterfaceType.Ethernet).FirstOrDefault();
+        private string _folderPath = "\\WAM\\Uploads\\";
 
         public CustomJobsController(DatabaseContext context)
         {
@@ -24,27 +28,35 @@ namespace AutomationManager.Models
         // GET: CustomJobs
         public async Task<IActionResult> Index()
         {
-            var x = _cjm.GetJobs();
-            return View(x);
+            List<CustomJobModel> jobs = _cjm.GetJobs();
+            List<WAMCustomJob> jobsToReturn = new List<WAMCustomJob>();
+            foreach (CustomJobModel job in jobs)
+            {
+                WAMCustomJob wcj = new WAMCustomJob(job.JobName, job.ScriptType, job.TriggerString, job.LastResult, job.ActionFilePath);
+                jobsToReturn.Add(wcj);
+            }
+            return View(jobsToReturn);
             //return View(await _context.WAMCustomJob.ToListAsync());
         }
 
         // GET: CustomJobs/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var wAMCustomJob = await _context.WAMCustomJob
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (wAMCustomJob == null)
+            //todo: make this async
+            var job = _cjm.GetJob(id);
+
+            if (job == null)
             {
                 return NotFound();
             }
+            WAMCustomJob wcj = new WAMCustomJob(job.JobName, job.ScriptType, job.TriggerString, job.LastResult, job.ActionFilePath);
 
-            return View(wAMCustomJob);
+            return View(wcj);
         }
 
         // GET: CustomJobs/Create
@@ -53,106 +65,157 @@ namespace AutomationManager.Models
             return View();
         }
 
-        // POST: CustomJobs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,JobType,JobName")] WAMCustomJob wAMCustomJob)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        wAMCustomJob.Id = Guid.NewGuid();
-        //        _context.Add(wAMCustomJob);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(wAMCustomJob);
-        //}
-
-        // GET: CustomJobs/Edit/5
-        //public async Task<IActionResult> Edit(Guid? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var wAMCustomJob = await _context.WAMCustomJob.FindAsync(id);
-        //    if (wAMCustomJob == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(wAMCustomJob);
-        //}
-
-        // POST: CustomJobs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(Guid id, [Bind("Id,JobType,JobName")] WAMCustomJob wAMCustomJob)
-        //{
-        //    if (id != wAMCustomJob.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        public IActionResult Create(WAMCustomJob job)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (job.ActionFile.Length > 0)
+                    {
+                        // string filePath = $@"\\{localIP}\c$" + _folderPath;
+                        string filePath = "C:\\WAM\\Uploads\\" + job.ActionFile.FileName;
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            job.ActionFile.CopyToAsync(stream);
+                            job.ActionFilePath = $@"\\{localIP}" + _folderPath + job.ActionFile.FileName;
 
+
+                        }
+                    }
+                    //todo: make this async
+                    _cjm.CreateOrUpdateJob(job.JobName, job.ScriptType, job.ActionFilePath, job.TriggerString);
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Failed to create custom job {job.JobName}. Error: {ex.Message}");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult Edit(WAMCustomJob job, string oldJobName)
+        {
+            try
+            {
+                if (job.ActionFile.Length > 0)
+                {
+                    // string filePath = $@"\\{localIP}\c$" + _folderPath;
+                    string filePath = "C:\\WAM\\Uploads\\" + job.ActionFile.FileName;
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        job.ActionFile.CopyToAsync(stream);
+                        job.ActionFilePath = $@"\\{localIP}" + _folderPath + job.ActionFile.FileName;
+
+
+                    }
+                }
+                //todo: make this async
+                if (job.JobName != oldJobName)
+                {
+                    _cjm.CreateOrUpdateJob(job.JobName, job.ScriptType, job.ActionFilePath, job.TriggerString, oldJobName);
+                } else
+                {
+                    _cjm.CreateOrUpdateJob(job.JobName, job.ScriptType, job.ActionFilePath, job.TriggerString);
+                }
+                   
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to create custom job {job.JobName}. Error: {ex.Message}");
+            }
+            
+            
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                //todo: make this async
+                var job = _cjm.GetJob(id);
+
+                if (job == null)
+                {
+                    return NotFound();
+                }
+                WAMCustomJob wcj = new WAMCustomJob(job.JobName, job.ScriptType, job.TriggerString, job.LastResult, job.ActionFilePath);
+                return View(wcj);
+
+            } catch (Exception ex)
+            {
+                throw new Exception($"Failed to update job: {id}. Error: {ex.Message}");
+            }
+        }
+
+        //[HttpPost]
+        //public IActionResult Edit(WAMCustomJob job)
+        //{
         //    if (ModelState.IsValid)
         //    {
         //        try
         //        {
-        //            _context.Update(wAMCustomJob);
-        //            await _context.SaveChangesAsync();
+        //            _cjm.CreateOrUpdateJob(job.JobName, job.ScriptType, job.ActionFilePath, job.TriggerString);
+
         //        }
-        //        catch (DbUpdateConcurrencyException)
+        //        catch (Exception ex)
         //        {
-        //            if (!WAMCustomJobExists(wAMCustomJob.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
+        //            throw new Exception($"Failed to update job: {job.JobName}. Error: {ex.Message}");
         //        }
-        //        return RedirectToAction(nameof(Index));
+
         //    }
-        //    return View(wAMCustomJob);
+        //    return RedirectToAction("Index");
         //}
 
+
         // GET: CustomJobs/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public IActionResult Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var wAMCustomJob = await _context.WAMCustomJob
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (wAMCustomJob == null)
+            try
+            {
+                //todo: make async
+                _cjm.RemoveJob(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to remove job: {id}. Error: {ex.Message}");
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        
+        public IActionResult TriggerJob(string id)
+        {
+            if (id==null)
             {
                 return NotFound();
             }
 
-            return View(wAMCustomJob);
-        }
-
-        // POST: CustomJobs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var wAMCustomJob = await _context.WAMCustomJob.FindAsync(id);
-            _context.WAMCustomJob.Remove(wAMCustomJob);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool WAMCustomJobExists(Guid id)
-        {
-            return _context.WAMCustomJob.Any(e => e.Id == id);
+            try
+            {
+                _cjm.TriggerJob(id);
+            }
+            catch (Exception eX)
+            {
+                throw new Exception($"Failed to trigger job {id}. Error: {eX.Message}");
+            }
+            return RedirectToAction("Details", "CustomJobs", new { id = id });
         }
     }
 }

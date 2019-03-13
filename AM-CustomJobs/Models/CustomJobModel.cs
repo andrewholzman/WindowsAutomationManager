@@ -7,18 +7,18 @@ namespace AM_CustomJobs.Models
 {
     public class CustomJobModel
     {
-        public CustomJobModel(string name, string type, string trigger, string filePath)
+        public CustomJobModel(string name, string type, string trigger, string lastResult,string filePath)
         {
             JobName = name;
             ScriptType = type;
             TriggerString = trigger;
+            LastResult = lastResult;
             ActionFilePath = filePath;
         }
-
-        public Guid Id { get; set; }
         public string JobName { get; set; }
         public string ScriptType { get; set; }
         public string TriggerString { get; set; }
+        public string LastResult { get; set; }
         public string ActionFilePath { get; set; }
     }
 }

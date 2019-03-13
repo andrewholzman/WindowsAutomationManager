@@ -1,39 +1,85 @@
 ﻿@model AutomationManager.Models.WAMCustomJob
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Custom Job - Details";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+<h2>Job Details: @Model.JobName</h2>
 
 <div>
-    <h4>WAMCustomJob</h4>
+
     <hr />
-    @*<dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.JobType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.JobType)
-        </dd>
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.JobName)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.JobName)
         </dd>
-    </dl>*@
+        <dt>
+            @Html.DisplayNameFor(model => model.ScriptType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ScriptType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TriggerString)
+
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TriggerString)
+            <div id="cron" class="cron" style="font-style:normal"></div>
+            <p hidden>@Html.TextBoxFor(m => m.TriggerString, new { id = "cron-value" })</p>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastResult)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastResult)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActionFilePath)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ActionFilePath)
+        </dd>
+    </dl>
+    
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="TriggerJob" asp-route-id="@Model.JobName" class="btn btn-primary">Trigger Job</a> |
+    <a asp-action="Edit" asp-route-id="@Model.JobName" class="btn btn-primary">Edit</a> |
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>
-</body>
-</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function() {
+            $('#cron').jqCron({
+                enabled_minute: true,
+                multiple_dom: true,
+                multiple_month: true,
+                multiple_mins: true,
+                multiple_dow: true,
+                multiple_time_hours: true,
+                multiple_time_minutes: true,
+                default_period: 'week',
+                default_value: $('#cron-value').innerHTML,
+                no_reset_button: true,
+                disabled: true,
+                lang: 'en',
+                bind_to: $('#cron-value')
+                //bind_method: {
+                //    set: function($element, value) {
+
+                //        $element.innerHTML = value;
+                //        $element.val(value);
+                //    }
+                //}
+            }).jqCronGetInstance().disable();
+        });
+
+       
+    </script>
+}

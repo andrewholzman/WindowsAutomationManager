@@ -4,11 +4,18 @@
     ViewData["Title"] = "Windows Task Scheduler";
 }
 
-<h2>Windows Task Scheduler</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="float-left">
+                <h2>Windows Scheduled Tasks</h2>
+            </div>
+            <div class="float-right">
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+            </div>
+        </div>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>

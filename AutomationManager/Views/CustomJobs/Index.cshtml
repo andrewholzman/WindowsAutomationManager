@@ -1,49 +1,63 @@
 ﻿@model IEnumerable<AutomationManager.Models.WAMCustomJob>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Custom Jobs";
 }
 
-<!DOCTYPE html>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="float-left">
+                <h2>Custom Jobs</h2>
+            </div>
+            <div class="float-right">
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@*<table class="table">
+
+<table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.JobType)
+                @Html.DisplayNameFor(model => model.JobName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JobName)
+                @Html.DisplayNameFor(model => model.ScriptType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TriggerString)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastResult)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ScriptType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TriggerString)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastResult)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.JobName">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.JobName">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.JobName">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
-</table>*@
-</body>
-</html>
+</table>

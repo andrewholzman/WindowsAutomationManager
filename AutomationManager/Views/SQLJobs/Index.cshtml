@@ -4,11 +4,19 @@
     ViewData["Title"] = "SQL Agent Jobs";
 }
 
-<h2>SQL Agent Jobs</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="float-left">
+                <h2>SQL Agent Jobs</h2>
+            </div>
+            <div class="float-right">
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -47,41 +55,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OriginatingServer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Schedule)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Steps)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastRunDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NextRunDate)
-            </td>
-            <td>
-            @*     <a asp-action="Edit" asp-route-id="@item.JobID">Edit</a> | *@
-            <a asp-action="Details" asp-route-id="@item.JobID.ToString()" asp-route-server="@item.OriginatingServer">Details</a>
-           <a asp-action="Delete" asp-route-id="@item.JobID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OriginatingServer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Schedule)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Steps)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateModified)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastRunDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NextRunDate)
+                </td>
+                <td>
+                    @*     <a asp-action="Edit" asp-route-id="@item.JobID">Edit</a> | *@
+                    <a asp-action="Details" asp-route-id="@item.JobID.ToString()" asp-route-server="@item.OriginatingServer">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.JobID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

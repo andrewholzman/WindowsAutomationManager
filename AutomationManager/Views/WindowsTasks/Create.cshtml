@@ -1,12 +1,11 @@
 ﻿@model AutomationManager.Models.WindowsTasks
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Scheduled Task - Create";
 }
 
-<h2>Create</h2>
+<h2>Create New Scheduled Task</h2>
 
-<h4>WindowsTasks</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,7 +19,7 @@
             <div class="form-group">
                 <label asp-for="TriggerType" class="control-label"></label>
                 @*<input asp-for="TriggerType" class="form-control" value="Custom" readonly/>*@
-                <select asp-for="TriggerType" asp-items="Model.TriggerTypes" id="trigger-type-select"></select>
+                <select asp-for="TriggerType" asp-items="Model.TriggerTypes" id="trigger-type-select" class="form-control"></select>
                 <span asp-validation-for="TriggerType" class="text-danger"></span>
             </div>
 
@@ -61,14 +60,15 @@
                 <span asp-validation-for="CreatedByUser" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" /> |
+                <a asp-action="Index"  class="btn btn-primary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+
 </div>
 
 @section Scripts {
