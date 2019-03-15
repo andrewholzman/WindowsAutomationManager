@@ -37,6 +37,7 @@ namespace AutomationManager.Controllers
             {
                 WindowsTasks task = new WindowsTasks();
                 task.Id = Guid.NewGuid(); //need to map this to something else from the task. look into docs
+                task.Name = t.Name;
                 task.Description = t.Definition.RegistrationInfo.Description;
                 var triggerCount = t.Definition.Triggers.Count;
                 if (triggerCount > 0)
@@ -57,21 +58,39 @@ namespace AutomationManager.Controllers
         }
 
         // GET: WindowsTasks/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(string id, bool substring)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var windowsTasks = await _context.WindowsTasks
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (windowsTasks == null)
+            try
             {
-                return NotFound();
+                TaskSchedulerManager tsm = new TaskSchedulerManager();
+                var t = tsm.GetTask(id,substring);
+                WindowsTasks task = new WindowsTasks();
+                task.Id = Guid.NewGuid(); //need to map this to something else from the task. look into docs
+                task.Name = t.Name;
+                task.Description = t.Definition.RegistrationInfo.Description;
+                var triggerCount = t.Definition.Triggers.Count;
+                if (triggerCount > 0)
+                {
+                    task.TriggerType = t.Definition.Triggers.First().TriggerType.ToString();
+                    //task.TriggerString = t.Definition.Triggers.First().Repetition.ToString(); //need to figure out what the trigger's schedule looks like and put it in here 
+                    task.TriggerString = t.Definition.Triggers.First().ToString();
+                    task.TriggerAction = t.Definition.Actions.First().ActionType.ToString();
+                    task.ActionFilePath = t.Definition.Actions.First().ToString();
+                }
+                task.LastRun = t.LastRunTime;
+                task.CreatedByUser = t.Definition.RegistrationInfo.Author;
+                return View(task);
+            } catch (Exception ex)
+            {
+                throw new Exception($"Failed to retreive task: {id}. Error: {ex.Message}");
             }
 
-            return View(windowsTasks);
+            
         }
 
         // GET: WindowsTasks/Create
@@ -201,6 +220,26 @@ namespace AutomationManager.Controllers
             _context.WindowsTasks.Remove(windowsTasks);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult TriggerTask(string id, bool substring)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                //string server, string username, string domain, string password, string folder, string description, string cronString
+                AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
+                tm.TriggerTask(id,substring);
+            }
+            catch (Exception eX)
+            {
+                throw new Exception($"Failed to trigger Task {id}. Error: {eX.Message}");
+            }
+            return RedirectToAction("Details", "WindowsTasks", new { id = id });
         }
 
         private bool WindowsTasksExists(Guid id)

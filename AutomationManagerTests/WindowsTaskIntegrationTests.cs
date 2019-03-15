@@ -1,3 +1,4 @@
+using AM_TaskScheduler;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutomationManagerTests
@@ -6,8 +7,13 @@ namespace AutomationManagerTests
     public class WindowsTaskIntegrationTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void FindJobWithSubstring()
         {
+            string id = "Keeps your Google software up to date".Substring(0, 20);
+            bool substring = true;
+            TaskSchedulerManager tsm = new TaskSchedulerManager();
+            var t = tsm.GetTask(id, substring);
         }
     }
 }
+

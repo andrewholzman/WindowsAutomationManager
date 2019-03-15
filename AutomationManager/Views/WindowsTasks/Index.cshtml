@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Windows Task Scheduler";
+    string x = "";
+    bool z = true;
 }
 
 <div class="container">
@@ -20,6 +22,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
@@ -27,8 +32,8 @@
                 Trigger Type
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.TriggerString)
-            </th>*@
+            @Html.DisplayNameFor(model => model.TriggerString)
+        </th>*@
             <th>
                 @*@Html.DisplayNameFor(model => model.TriggerAction)*@
                 Action
@@ -41,10 +46,6 @@
                 @*@Html.DisplayNameFor(model => model.LastRun)*@
                 Last Ran
             </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.CreatedByUser)*@
-                Created By
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -52,14 +53,17 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TriggerType)
             </td>
             @*<td>
-                @Html.DisplayFor(modelItem => item.TriggerString)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.TriggerString)
+        </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.TriggerAction)
             </td>
@@ -70,11 +74,19 @@
                 @Html.DisplayFor(modelItem => item.LastRun)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedByUser)
-            </td>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
-                <a asp-action="Delete" asp-route-taskName="@item.Description">Delete</a>
+                @if (item.Name.Length > 20)
+                {
+                    x = item.Name.Substring(0, 20);
+                    z = true;
+                }
+                else
+                {
+                    x = item.Name;
+                    z = false;
+                }
+                <a asp-action="Edit" asp-route-id="@x" asp-route-substring="@z">Edit</a>
+                <a asp-action="Details" asp-route-id="@x" asp-route-substring="@z">Details</a>
+                <a asp-action="Delete" asp-route-taskName="@item.Name">Delete</a>
             </td>
         </tr>
 }

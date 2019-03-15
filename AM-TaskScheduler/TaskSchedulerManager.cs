@@ -30,6 +30,42 @@ namespace AM_TaskScheduler
 
         }
 
+        public Task GetTask(string taskName, bool substring)
+        {
+            if (substring) { taskName = taskName + "*"; }
+            try
+            {
+                using (TaskService ts = new TaskService())
+                {
+                    return ts.FindTask(taskName, true);
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve task: " + taskName + " on Local Server - " + ex.Message);
+            }
+        }
+
+        public Task GetTask(string taskName, bool substring, string server, string username, string domain, string password)
+        {
+            try
+            {
+                using (TaskService ts = new TaskService(server,username,domain,password))
+                {
+                    return ts.FindTask(taskName, true);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve task: " + taskName + " on Server: " + server + " - " + ex.Message);
+            }
+        }
+
         public void CreateExecTaskRemote(string server, string username, string domain, string password, string folder, string description, string cronString)
         {
             try
@@ -138,7 +174,40 @@ namespace AM_TaskScheduler
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to remove task: " + taskName + " on server: " + server + " - " + ex.Message);
+                throw new Exception("Failed to remove task: " + taskName + " on Server: " + server + " - " + ex.Message);
+            }
+        }
+
+        public void TriggerTask(string taskName, bool substring)
+        {
+            if (substring) { taskName = "*" + taskName + "*"; }
+            try
+            {
+                using (TaskService ts = new TaskService())
+                {
+                    Task task = ts.FindTask(taskName, true);
+                    var runTask = task.Run();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to trigger task: " + taskName + " on Local Server - " + ex.Message);
+            }
+        }
+
+        public void TriggerTask(string taskName, bool substring, string server, string username, string domain, string password)
+        {
+            try
+            {
+                using (TaskService ts = new TaskService(server, username, domain, password))
+                {
+                    Task task = ts.FindTask(taskName);
+                    var runTask = task.Run();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to trigger task: " + taskName + " on Server: " + server + " - " + ex.Message);
             }
         }
 

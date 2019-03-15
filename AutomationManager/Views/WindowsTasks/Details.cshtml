@@ -2,14 +2,21 @@
 
 @{
     ViewData["Title"] = "Details";
+    string x = "";
+    bool z = true;
 }
 
-<h2>Details</h2>
+<h2>Task Details: @Model.Name</h2>
 
 <div>
-    <h4>WindowsTasks</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -17,44 +24,43 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TriggerType)
+            Trigger Type
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TriggerType)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TriggerString)
+            Trigger Schedule
+
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TriggerString)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TriggerAction)
+            Trigger Action Type
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TriggerAction)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateCreated)
+            Action
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LastRun)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastRun)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedByUser)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedByUser)
+            @Html.DisplayFor(model => model.ActionFilePath)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (@Model.Name.Length > 20) {
+        x = @Model.Name.Substring(0, 20);
+        z = true;
+    } else
+    {
+        x = Model.Name;
+        z = false;
+    }
+    <a asp-action="TriggerTask" asp-route-id="@x" asp-route-substring ="@z" class="btn btn-primary">Trigger Task</a> |
+    <a asp-action="Edit" asp-route-id="@x" asp-route-substring ="@z" class="btn btn-primary">Edit</a> |
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
 </div>
+
