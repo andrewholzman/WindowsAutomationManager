@@ -237,10 +237,24 @@ namespace AM_SqlServer
                     
                     JobStep jobStep = new JobStep(job, wamJob.JobStepName);
                     jobStep.Command = wamJob.JobStepCommand;
-                    jobStep.OnSuccessAction = StepCompletionAction.QuitWithSuccess;
-                    jobStep.OnFailAction = StepCompletionAction.QuitWithFailure;
+                    jobStep.OnSuccessAction = StepCompletionAction.GoToStep;
+                    jobStep.OnSuccessStep = 2;
+                    jobStep.OnFailAction = StepCompletionAction.GoToStep;
+                    jobStep.OnFailStep = 3;
                     jobStep.Create();
-                    
+
+                    JobStep successStep = new JobStep(job, "ReportSuccess");
+                    successStep.Command = $"INSERT INTO WAM.dbo.JobHistory VALUES(NEWID(),{wamJob.JobStepName},'SQL',GETDATE(),'Success',null)";
+                    successStep.OnSuccessAction = StepCompletionAction.QuitWithSuccess;
+                    successStep.OnFailAction = StepCompletionAction.GoToStep;
+                    successStep.OnFailStep = 3;
+                    successStep.Create();
+
+                    JobStep failStep = new JobStep(job, "ReportFailure");
+                    failStep.Command = $"INSERT INTO WAM.dbo.JobHistory VALUES(NEWID(),{wamJob.JobStepName},'SQL',GETDATE(),'Failure','Not Available'";
+                    failStep.OnSuccessAction = StepCompletionAction.QuitWithSuccess;
+                    failStep.OnFailAction = StepCompletionAction.QuitWithFailure;
+                    failStep.Create();
 
                     JobSchedule jobSched = new JobSchedule(job, wamJob.ScheduleName);
                     jobSched.FrequencyTypes = wamJob.ScheduleFrequencyType;
