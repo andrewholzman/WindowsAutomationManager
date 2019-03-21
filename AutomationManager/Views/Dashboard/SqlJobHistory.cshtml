@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<AutomationManager.Models.JobHistory>
 @{
-    ViewData["Title"] = "Job Dashboard";
+    ViewData["Title"] = "SQL Job History";
     int successCount = 0;
     int failCount = 0;
     int totalCount = 0;
@@ -24,11 +24,12 @@
     <div class="row">
         <div class="col-12">
             <div class="float-left">
-                <h2>Recent Job History</h2>
+                <h2>SQL Job History</h2>
             </div>
             <div class="float-right">
-                <a asp-action="SqlJobHistory" class="btn btn-primary">SQL Job History</a>
-                <a asp-action="CustomJobHistory" class="btn btn-primary">Custom Job History</a>
+                <a asp-action="SqlJobHistory" class="btn btn-primary">All</a>
+                <a asp-action="SqlJobHistoryForType" asp-route-type="Success" class="btn btn-primary">Success</a>
+                <a asp-action="SqlJobHistoryForType" asp-route-type="Failure" class="btn btn-primary">Failure</a>
             </div>
         </div>
     </div>
@@ -113,17 +114,16 @@
 
         function drawChart() {
 
-        
             var data = google.visualization.arrayToDataTable([
                 ['Result', 'Count', { role: 'style' }],
                 ['Success', @successCount, 'color: blue'],
                 ['Failure', @failCount, 'color: red'],
             ]);
 
-            // Simple Bar Chart:
+            // Simple Chart:
             var option = {
-                title: 'Job History - Success Vs Failure',
-                legend: {position: 'bottom'},
+                title: 'SQL Agent Job History - Success Vs Failure',
+                legend: { position: 'bottom' },
                 pieHole: 0.4,
                 width: 500,
                 height: 400
@@ -137,4 +137,3 @@
         }
     </script>
 }
-

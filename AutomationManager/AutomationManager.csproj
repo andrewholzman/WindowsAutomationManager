@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AM-CustomJobs\AM-CustomJobs.csproj" />
+    <ProjectReference Include="..\AM-History\AM-History.csproj" />
     <ProjectReference Include="..\AM-SqlServer\AM-SqlServer.csproj" />
     <ProjectReference Include="..\AM-TaskScheduler\AM-TaskScheduler.csproj" />
   </ItemGroup>

@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM-SqlServer", "AM-SqlServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AM-CustomJobs", "AM-CustomJobs\AM-CustomJobs.csproj", "{65BAC2D0-4A89-4F85-94FB-17519EB7A24C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationManagerTests", "AutomationManagerTests\AutomationManagerTests.csproj", "{32731DCA-1848-4128-8487-E8696EF48C0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomationManagerTests", "AutomationManagerTests\AutomationManagerTests.csproj", "{32731DCA-1848-4128-8487-E8696EF48C0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AM-History", "AM-History\AM-History.csproj", "{0BFC435F-C7DA-485B-9391-503309BE575D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{32731DCA-1848-4128-8487-E8696EF48C0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32731DCA-1848-4128-8487-E8696EF48C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32731DCA-1848-4128-8487-E8696EF48C0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BFC435F-C7DA-485B-9391-503309BE575D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BFC435F-C7DA-485B-9391-503309BE575D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BFC435F-C7DA-485B-9391-503309BE575D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BFC435F-C7DA-485B-9391-503309BE575D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
