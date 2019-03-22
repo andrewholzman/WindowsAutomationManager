@@ -104,27 +104,25 @@ namespace AutomationManager.Controllers
         // POST: WindowsTasks/Create but not to database
         public IActionResult CreateTask(WindowsTasks task)
         {
-            if (ModelState.IsValid)
+            if (task.ActionFile.Length > 0)
             {
-                if (task.ActionFile.Length > 0)
+                // string filePath = $@"\\{localIP}\c$" + _folderPath;
+                string filePath = "C:\\WAM\\Uploads\\"+task.ActionFile.FileName;
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                  // string filePath = $@"\\{localIP}\c$" + _folderPath;
-                    string filePath = "C:\\WAM\\Uploads\\"+task.ActionFile.FileName;
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        task.ActionFile.CopyToAsync(stream);
-                        task.ActionFilePath = $@"\\{localIP}"+_folderPath + task.ActionFile.FileName;
+                    task.ActionFile.CopyToAsync(stream);
+                    task.ActionFilePath = $@"\\{localIP}"+_folderPath + task.ActionFile.FileName;
                        
 
-                    }
                 }
-                //string server, string username, string domain, string password, string folder, string description, string cronString
-                AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
-                WindowsTask mTasks = new WindowsTask(task);
-
-                tm.CreateTask(mTasks);
-
             }
+            //string server, string username, string domain, string password, string folder, string description, string cronString
+            AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
+            WindowsTask mTasks = new WindowsTask(task);
+
+            tm.CreateTask(mTasks);
+
+            
             return RedirectToAction("Index");
         }
 
@@ -146,59 +144,68 @@ namespace AutomationManager.Controllers
         }
 
         // GET: WindowsTasks/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(string id, bool substring)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var windowsTasks = await _context.WindowsTasks.FindAsync(id);
-
-            if (windowsTasks == null)
+            try
             {
-                return NotFound();
+                TaskSchedulerManager tsm = new TaskSchedulerManager();
+                var t = tsm.GetTask(id, substring);
+                WindowsTasks task = new WindowsTasks();
+                task.Id = Guid.NewGuid(); //need to map this to something else from the task. look into docs
+                task.Name = t.Name;
+                task.Description = t.Definition.RegistrationInfo.Description;
+                var triggerCount = t.Definition.Triggers.Count;
+                if (triggerCount > 0)
+                {
+                    task.TriggerType = t.Definition.Triggers.First().TriggerType.ToString();
+                    //task.TriggerString = t.Definition.Triggers.First().Repetition.ToString(); //need to figure out what the trigger's schedule looks like and put it in here 
+                    task.TriggerString = t.Definition.Triggers.First().ToString();
+                    task.TriggerAction = t.Definition.Actions.First().ActionType.ToString();
+                    task.ActionFilePath = t.Definition.Actions.First().ToString();
+                }
+                task.LastRun = t.LastRunTime;
+                task.CreatedByUser = t.Definition.RegistrationInfo.Author;
+                return View(task);
             }
-            return View(windowsTasks);
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to retreive task: {id}. Error: {ex.Message}");
+            }
         }
 
-        // POST: WindowsTasks/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Description,TriggerType,TriggerString,TriggerAction,DateCreated,LastRun,CreatedByUser")] WindowsTasks windowsTasks)
+        public IActionResult Edit(WindowsTasks task)
         {
-            if (id != windowsTasks.Id)
+            if (task.ActionFile.Length > 0)
             {
-                return NotFound();
-            }
+                // string filePath = $@"\\{localIP}\c$" + _folderPath;
+                string filePath = "C:\\WAM\\Uploads\\" + task.ActionFile.FileName;
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    task.ActionFile.CopyToAsync(stream);
+                    task.ActionFilePath = $@"\\{localIP}" + _folderPath + task.ActionFile.FileName;
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(windowsTasks);
-                    await _context.SaveChangesAsync();
+
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WindowsTasksExists(windowsTasks.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            return View(windowsTasks);
+            //string server, string username, string domain, string password, string folder, string description, string cronString
+            AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
+            WindowsTask mTasks = new WindowsTask(task);
+
+            tm.UpdateTask(mTasks);
+
+            
+            return RedirectToAction("Index");
         }
-
-        // GET: WindowsTasks/Delete/5
-        public async Task<IActionResult> Delete(string taskName)
+            // GET: WindowsTasks/Delete/5
+            public async Task<IActionResult> Delete(string taskName)
         {
             if (taskName == null)
             {

@@ -145,6 +145,62 @@ namespace AM_TaskScheduler
             }
         }
 
+        public void UpdateTask(WindowsTask task)
+        {
+            try
+            {
+                var securityIdentifier = WindowsIdentity.GetCurrent().User;
+                if (securityIdentifier != null)
+                {
+                    var sid = securityIdentifier.Value;
+                }
+                var userId = WindowsIdentity.GetCurrent().Name;
+
+                //using (TaskService ts = new TaskService())
+                //{
+                //    TaskDefinition td = ts.NewTask();
+                //    td.RegistrationInfo.Description = description;
+                //    td.Principal.RunLevel = TaskRunLevel.Highest;
+                //    td.Actions.Add(new ExecAction("notepad.exe", @"C:\temp\temp.log", null));
+                //    td.Triggers.Add(new DailyTrigger() { StartBoundary = DateTime.Today.AddHours(19) });
+                //    td.Triggers.Add(Trigger.FromCronFormat(cronString).First());
+                //    ts.RootFolder.RegisterTaskDefinition(@"Test", td);
+                //}
+                using (TaskService ts = new TaskService())
+                {
+                    DeleteTask(task.Name);
+                    TaskDefinition td = ts.NewTask();
+                    td.RegistrationInfo.Description = task.Description;
+
+
+                    switch (task.TriggerType)
+                    {
+                        case "Custom":
+                            Trigger[] trigger = Trigger.FromCronFormat(task.TriggerString);
+                            td.Triggers.Add(trigger.First());
+                            break;
+                        case "Logon":
+                            td.Triggers.Add(new LogonTrigger());
+                            break;
+                        case "Startup":
+                            td.Triggers.Add(new BootTrigger());
+                            break;
+                    }
+
+
+                    td.Actions.Add(new ExecAction(task.ActionFilePath, null));
+                    td.Principal.UserId = @"NT AUTHORITY\NETWORKSERVICE"; /*System.Security.Principal.WindowsIdentity.GetCurrent().Name;*/
+                    td.Principal.LogonType = TaskLogonType.ServiceAccount;
+                    string taskDef = task.Description;
+                    TaskService.Instance.RootFolder.RegisterTaskDefinition(taskDef, td);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to create task on local host" + ex.Message);
+            }
+        }
+
         public void DeleteTask(string taskName)
         {
             try
