@@ -228,9 +228,6 @@ namespace AM_SqlServer
             {
                 try
                 {
-                    Operator op = new Operator(srv.JobServer, "WAM_Operator");
-                    op.NetSendAddress = "WAM_Server";
-                    op.Create();
                     Job job = new Job(srv.JobServer, wamJob.Name);
                     job.Description = wamJob.Description;
                     job.Create();

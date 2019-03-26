@@ -199,9 +199,7 @@ namespace AutomationManager.Controllers
             AM_TaskScheduler.TaskSchedulerManager tm = new AM_TaskScheduler.TaskSchedulerManager();
             WindowsTask mTasks = new WindowsTask(task);
 
-            tm.UpdateTask(mTasks);
-
-            
+            tm.UpdateTask(mTasks);         
             return RedirectToAction("Index");
         }
             // GET: WindowsTasks/Delete/5

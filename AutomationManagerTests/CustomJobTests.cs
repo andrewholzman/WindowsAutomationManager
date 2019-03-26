@@ -10,14 +10,14 @@ namespace AutomationManagerTests
     public class CustomJobTests
     {
         CustomJobManager _cjm = new CustomJobManager();
+        string _id = "unit-test-job";
+        string _scriptType = "VBS";
+        string _actionFilePath = "C:\temp\temp.vbs";
+        string _triggerString = "0 * * * *";
         [TestMethod]
         public void JobShouldCreateSuccessfully()
         {
-            string id = "tset-job-1";
-            string scriptType = "VBS";
-            string actionFilePath = "C:\temp\temp.vbs";
-            string triggerString = "0 * * * *";
-            _cjm.CreateOrUpdateJob(id, scriptType, actionFilePath, triggerString);
+            _cjm.CreateOrUpdateJob(_id, _scriptType, _actionFilePath, _triggerString);
         }
         [TestMethod]
         public void ShouldReturnJobs()
@@ -29,8 +29,26 @@ namespace AutomationManagerTests
         [TestMethod]
         public void GetJobById()
         {
-            var job = _cjm.GetJob("tset-job-1");
+            var job = _cjm.GetJob(_id);
             Assert.IsNotNull(job);
+        }
+
+        [TestMethod]
+        public void JobShouldDeleteSuccessfully()
+        {
+            JobShouldCreateSuccessfully();
+            _cjm.RemoveJob(_id);
+            var job = _cjm.GetJob(_id);
+            Assert.IsNull(job); //job was not returned, therefore it does not exist
+        }
+
+        [TestMethod]
+        public void JobShouldTriggerSuccessfully()
+        {
+            JobShouldCreateSuccessfully();
+            _cjm.TriggerJob(_id);
+            var job = _cjm.GetJob(_id);
+            Assert.IsNotNull(job.LastResult); //job has a last result, which means its ran
         }
     }
 }
